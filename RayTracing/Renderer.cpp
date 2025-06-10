@@ -37,12 +37,13 @@ void Renderer::OnResize(uint32_t width, uint32_t height) {
 
 void Renderer::Render(const Camera& camera) {
 	// render every pixel
-	const glm::vec3& rayOrigin = camera.GetPosition();;
+	Ray ray;
+	ray.Origin = camera.GetPosition();
 	for (uint32_t y = 0; y < finalImage->GetHeight(); y++) {
 		for (uint32_t x = 0; x < finalImage->GetWidth(); x++) {		
 			uint32_t idx = x + y * finalImage->GetWidth();
-			const glm::vec3& rayDirection = camera.GetRayDirections()[idx];
-			auto color = TraceRay(coord);
+			ray.Direction = camera.GetRayDirections()[idx];
+			auto color = TraceRay(ray);
 
 			color = glm::clamp(color, glm::vec4(0.0f), glm::vec4(1.0f));
 			imageData[idx] = Utils::ConvertToRGBA(color);
@@ -63,16 +64,15 @@ void Renderer::SetLightDirectionInput(glm::vec3 lightDirection)
 	this->lightDirection.z = -(this->lightDirection.z);
 }
 
-glm::vec4 Renderer::TraceRay(glm::vec2 uv) {
+glm::vec4 Renderer::TraceRay(const Ray& ray) {
 	float radius = 0.5f;
 	float distance = 0.0f;
 	float aspectRatio = finalImage->GetWidth() / (float)finalImage->GetHeight();
-	uv.x *= aspectRatio;
 
 	glm::vec3 sphereCenter    (0.0f, 0.0f, distance);
 
-	glm::vec3 rayOrigin       (0.0f, 0.0f, 1.0f);
-	glm::vec3 rayDirection    (uv.x, uv.y, -1);
+	glm::vec3 rayOrigin       = ray.Origin;
+	glm::vec3 rayDirection    = ray.Direction;
 
 
 	float a = glm::dot        (rayDirection, rayDirection);

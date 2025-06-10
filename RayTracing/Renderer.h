@@ -4,6 +4,7 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include "Camera.h"
+#include "Ray.h"
 
 class Renderer
 {
@@ -23,7 +24,7 @@ public:
 	std::shared_ptr<Walnut::Image> GetFinalImage() const { return finalImage; };
 
 private:
-	glm::vec4 TraceRay(glm::vec2 uv);
+	glm::vec4 TraceRay(const Ray& ray);
 
 private:
 	std::shared_ptr<Walnut::Image> finalImage;

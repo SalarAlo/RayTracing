@@ -8,8 +8,7 @@
 
 using namespace Walnut;
 
-class ExampleLayer : public Walnut::Layer
-{
+class ExampleLayer : public Walnut::Layer {
 public:
 	ExampleLayer() : camera(45.0f, 0.1f, 100.0f) {};
 
